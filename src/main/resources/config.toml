@@ -1,0 +1,4 @@
+[warden]
+invulnerability = 45
+default-cooldown = 6
+resign-cooldown = 3

@@ -1,0 +1,8 @@
+name: PrisonButBad
+version: '0.1.0'
+main: me.honkling.prisonbutbad.PrisonButBad
+api-version: '1.21'
+prefix: PrisonButBad
+authors: [ honkling ]
+description: A prison server.
+website: https://github.com/honkling/prisonbutbad
