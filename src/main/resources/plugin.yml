@@ -1,8 +1,15 @@
 name: PrisonButBad
 version: '0.1.0'
-main: me.honkling.prisonbutbad.PrisonButBad
+main: me.honkling.neopbb.PrisonButBad
 api-version: '1.21'
 prefix: PrisonButBad
 authors: [ honkling ]
 description: A prison server.
 website: https://github.com/honkling/prisonbutbad
+depend: [packetevents]
+#libraries:
+#  - org.jetbrains.kotlin:kotlin-scripting-common:2.1.0
+#  - org.jetbrains.kotlin:kotlin-scripting-jvm:2.1.0
+#  - org.jetbrains.kotlin:kotlin-scripting-dependencies:2.1.0
+#  - org.jetbrains.kotlin:kotlin-scripting-dependencies-maven:2.1.0
+#  - org.jetbrains.kotlin:kotlin-scripting-jvm-host:2.1.0

@@ -1,0 +1,5 @@
+[prisons.fallback]
+name = "Fallback"
+world = "world"
+black-market-enter = { world = "world", x = 107.5, y = 81, z = -212.5 }
+black-market-exit = { world = "world", x = 107.5, y = 81, z = -210.5 }

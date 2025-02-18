@@ -1,3 +1,18 @@
+[items.air]
+type = "minecraft:air"
+
+[items.cobblestone]
+type = "minecraft:cobblestone"
+
+[items.stick]
+type = "minecraft:stick"
+
 [items.key]
 type = "minecraft:tripwire_hook"
 name = "Key"
+recipe = ["cobblestone", "stick"]
+
+[items.steak]
+type = "minecraft:cooked_beef"
+name = "Steak"
+price = 10.0
