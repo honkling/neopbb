@@ -75,7 +75,7 @@ internal fun tickSchedule() {
         periodChanged = true
     }
 
-    if (oldPeriod == Period.RollCall && periodChanged) {
+    if (oldPeriod == Period.RollCall && period != Period.RollCall && periodChanged) {
         val guiltyPeople = Bukkit.getOnlinePlayers().filter { !it.attendedRollCall && it.role == Role.Prisoner }
 
         if (guiltyPeople.isEmpty()) {
