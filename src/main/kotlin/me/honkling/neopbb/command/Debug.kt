@@ -19,26 +19,10 @@ private fun money(sender: CommandSender, player: Player, money: Float) {
     sender.sendMessage("<p><s>${player.name}</s> now has <s>${formatCurrency(money)}</s>.".mm)
 }
 
-private fun setRole(sender: CommandSender, player: Player, role: Role, withKit: Boolean) {
+private fun role(sender: CommandSender, player: Player, role: Role, withKit: Boolean) {
     player.role = role
-    sender.sendMessage("<p><s>${player.name}</s>'s role is now set to <s>${role.name}</s>.".mm)
+    sender.sendMessage("<p><s>${player.name}</s> is now a ${role.name.lowercase()}.".mm)
 
-    if(withKit)
-        player.prepare(true, broadcast = false)
-}
-
-private fun `setRole$complete`(sender: CommandSender, node: ParameterNode<Command>, input: String): List<String> {
-    val suggestions = when (node.name) {
-        "player" -> Bukkit.getOnlinePlayers()
-            .map { it.name }
-
-        "role" -> Role.entries
-            .map { it.name }
-
-        "withKit" -> listOf("true", "false")
-
-        else -> emptyList()
-    }
-
-    return suggestions.filter { it.contains(input, ignoreCase = true) }
+    if (withKit)
+        player.prepare(true)
 }

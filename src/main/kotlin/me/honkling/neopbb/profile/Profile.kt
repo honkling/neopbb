@@ -30,7 +30,7 @@ var Player.respawnTask by createKey<Int?>(false)
 val Player.inSolitary get() = solitaryTask != null
 val Player.isRespawning get() = respawnTask != null
 
-fun Player.prepare(reset: Boolean, broadcast: Boolean) {
+fun Player.prepare(reset: Boolean, broadcast: Boolean = false) {
     if (reset) {
         inventory.clear()
         health = getAttribute(Attribute.MAX_HEALTH)!!.value
@@ -63,7 +63,7 @@ fun Player.forceRespawn() {
 
     sendTitlePart(TitlePart.TITLE, Component.empty())
     sendTitlePart(TitlePart.SUBTITLE, Component.empty())
-    prepare(true, broadcast = false)
+    prepare(true)
     teleport(
         if (inSolitary) currentPrison.solitary
         else currentPrison.respawn
