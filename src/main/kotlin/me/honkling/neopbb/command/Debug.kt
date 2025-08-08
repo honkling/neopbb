@@ -19,7 +19,7 @@ private fun money(sender: CommandSender, player: Player, money: Float) {
     sender.sendMessage("<p><s>${player.name}</s> now has <s>${formatCurrency(money)}</s>.".mm)
 }
 
-private fun role(sender: CommandSender, player: Player, role: Role, withKit: Boolean) {
+private fun role(sender: CommandSender, player: Player, role: Role, withKit: Boolean = true) {
     player.role = role
     val article = if (role == Role.Warden) "the" else "a"
     sender.sendMessage("<p><s>${player.name}</s> is now $article ${role.name.lowercase()}.".mm)
