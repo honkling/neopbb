@@ -16,7 +16,7 @@ private fun accept(player: Player) {
         ?: return player.sendMessage("<p>You don't have any invitations.".mm)
 
     player.role = invite.role
-    player.prepare(true)
+    player.prepare(true, broadcast = true);
     invite.cancel()
     player.invite = null
 

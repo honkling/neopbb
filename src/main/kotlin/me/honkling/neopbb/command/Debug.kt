@@ -24,7 +24,7 @@ private fun setRole(sender: CommandSender, player: Player, role: Role, withKit: 
     sender.sendMessage("<p><s>${player.name}</s>'s role is now set to <s>${role.name}</s>.".mm)
 
     if(withKit)
-        player.prepare(true)
+        player.prepare(true, broadcast = false)
 }
 
 private fun `setRole$complete`(sender: CommandSender, node: ParameterNode<Command>, input: String): List<String> {

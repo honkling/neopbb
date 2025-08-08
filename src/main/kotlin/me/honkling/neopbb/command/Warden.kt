@@ -6,25 +6,10 @@ import me.honkling.commando.common.command.node.ParameterNode
 import me.honkling.commando.spigot.command.Command
 import me.honkling.neopbb.instance
 import me.honkling.neopbb.lib.mm
-import me.honkling.neopbb.profile.Invite
-import me.honkling.neopbb.profile.Role
-import me.honkling.neopbb.profile.cleanUp
-import me.honkling.neopbb.profile.forceRespawn
-import me.honkling.neopbb.profile.inSolitary
-import me.honkling.neopbb.profile.invite
-import me.honkling.neopbb.profile.isRespawning
-import me.honkling.neopbb.profile.lastWarden
-import me.honkling.neopbb.profile.prepare
-import me.honkling.neopbb.profile.role
-import me.honkling.neopbb.profile.solitaryTask
-import me.honkling.neopbb.profile.swatUnlocked
-import me.honkling.neopbb.profile.warden
-import me.honkling.neopbb.profile.wardenCooldown
-import me.honkling.neopbb.refreshTab
+import me.honkling.neopbb.profile.*
 import org.bukkit.Bukkit
 import org.bukkit.command.CommandSender
 import org.bukkit.entity.Player
-import kotlin.time.Clock
 import kotlin.time.ExperimentalTime
 
 private fun warden(player: Player) {
@@ -42,7 +27,7 @@ private fun warden(player: Player) {
 
     lastWarden = player
     player.role = Role.Warden
-    player.prepare(true)
+    player.prepare(true, broadcast = true)
 }
 
 private fun hire(player: Player, target: Player, role: Role) {
@@ -86,7 +71,7 @@ private fun fire(player: Player, target: Player) {
 
     Bukkit.getServer().sendMessage("<p><s>${target.name}</s> has been fired!".mm)
     target.role = Role.Prisoner
-    target.prepare(true)
+    target.prepare(true, broadcast = true)
 }
 
 private fun `fire$complete`(sender: CommandSender, node: ParameterNode<Command>, input: String): List<String> {
@@ -116,7 +101,7 @@ private fun solitary(sender: Player, player: Player) {
         Bukkit.getPlayer(player.uniqueId)?.let { player = it } // Refresh player instance in case they relogged
         player.solitaryTask = null
         player.role = Role.Prisoner
-        player.prepare(true)
+        player.prepare(true, broadcast = true)
 
         if (!player.isOnline)
             player.cleanUp()
@@ -136,7 +121,7 @@ private fun release(sender: Player, player: Player) {
 
     if (player.isRespawning)
         player.forceRespawn()
-    else player.prepare(true)
+    else player.prepare(true, broadcast = true)
 }
 
 private fun help(sender: CommandSender) {

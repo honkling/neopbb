@@ -4,13 +4,7 @@ package me.honkling.neopbb.command
 
 import me.honkling.commando.spigot.command.Command
 import me.honkling.neopbb.lib.mm
-import me.honkling.neopbb.profile.Role
-import me.honkling.neopbb.profile.inSolitary
-import me.honkling.neopbb.profile.isRespawning
-import me.honkling.neopbb.profile.prepare
-import me.honkling.neopbb.profile.role
-import me.honkling.neopbb.profile.warden
-import me.honkling.neopbb.profile.wardenCooldown
+import me.honkling.neopbb.profile.*
 import org.bukkit.Bukkit
 import org.bukkit.entity.Player
 
@@ -27,5 +21,5 @@ private fun resign(player: Player) {
     }
 
     player.role = Role.Prisoner
-    player.prepare(true)
+    player.prepare(true, broadcast = true)
 }

@@ -1,17 +1,9 @@
 package me.honkling.neopbb.profile
 
-import me.honkling.neopbb.criminalsTeam
-import me.honkling.neopbb.currentPrison
-import me.honkling.neopbb.guardsTeam
-import me.honkling.neopbb.instance
+import me.honkling.neopbb.*
 import me.honkling.neopbb.lib.builder
 import me.honkling.neopbb.lib.illegalGoldenApple
 import me.honkling.neopbb.lib.mm
-import me.honkling.neopbb.nursesTeam
-import me.honkling.neopbb.prisonersTeam
-import me.honkling.neopbb.solitaryTeam
-import me.honkling.neopbb.swatsTeam
-import me.honkling.neopbb.wardenTeam
 import net.kyori.adventure.key.Key
 import net.kyori.adventure.sound.Sound
 import net.kyori.adventure.title.TitlePart
@@ -78,7 +70,7 @@ enum class Role(
         for (player in Bukkit.getOnlinePlayers()) {
             if (player != warden && player.role.isAuthority) {
                 player.role = Prisoner
-                player.prepare(true)
+                player.prepare(true, broadcast = true)
             }
 
             player.invite?.expire()

@@ -4,22 +4,11 @@ package me.honkling.neopbb.event
 
 import com.destroystokyo.paper.event.player.PlayerPostRespawnEvent
 import com.destroystokyo.paper.event.player.PlayerStopSpectatingEntityEvent
-import io.papermc.paper.entity.TeleportFlag
 import me.honkling.commando.spigot.event.Listener
 import me.honkling.neopbb.currentPrison
 import me.honkling.neopbb.instance
 import me.honkling.neopbb.lib.mm
-import me.honkling.neopbb.profile.Role
-import me.honkling.neopbb.profile.cleanUp
-import me.honkling.neopbb.profile.forceRespawn
-import me.honkling.neopbb.profile.inSolitary
-import me.honkling.neopbb.profile.isRespawning
-import me.honkling.neopbb.profile.money
-import me.honkling.neopbb.profile.prepare
-import me.honkling.neopbb.profile.respawnTask
-import me.honkling.neopbb.profile.role
-import me.honkling.neopbb.profile.warden
-import me.honkling.neopbb.profile.wardenCooldown
+import me.honkling.neopbb.profile.*
 import me.honkling.neopbb.refreshTab
 import net.kyori.adventure.title.Title
 import net.kyori.adventure.title.TitlePart
@@ -29,9 +18,7 @@ import org.bukkit.entity.Player
 import org.bukkit.event.entity.PlayerDeathEvent
 import org.bukkit.event.player.PlayerJoinEvent
 import org.bukkit.event.player.PlayerQuitEvent
-import org.bukkit.event.player.PlayerRespawnEvent
 import java.time.Duration
-import kotlin.properties.Delegates
 
 private fun onJoin(event: PlayerJoinEvent) {
     val player = event.player
@@ -40,7 +27,7 @@ private fun onJoin(event: PlayerJoinEvent) {
         player.role = Role.Solitary
 
     player.gameMode = GameMode.ADVENTURE
-    player.prepare(true)
+    player.prepare(true, broadcast = true)
     event.joinMessage("<p><s>${player.name}</s> is now in prison.".mm)
     refreshTab()
 }
@@ -50,7 +37,7 @@ private fun onQuit(event: PlayerQuitEvent) {
 
     if (warden == player) {
         player.role = Role.Prisoner
-        player.prepare(true)
+        player.prepare(true, broadcast = true)
         Bukkit.getServer().sendMessage("<p>The warden has left!".mm)
         wardenCooldown = 20 * 5
     }
