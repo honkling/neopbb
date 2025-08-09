@@ -23,6 +23,7 @@ var Player.invite by createKey<Invite?>(false)
 var Player.money by createKey(0.0f)
 var Player.teamChat by createKey(fallbackValue = false)
 
+var Player.isInTutorial by createKey<Boolean>(false, persistent = false)
 var Player.attendedRollCall by createKey<Boolean>(false, persistent = false)
 var Player.isInBlackMarket by createKey<Boolean>(false, persistent = false)
 var Player.solitaryTask by createKey<Int?>(persistent = false)
@@ -78,7 +79,8 @@ fun Player.cleanUp() {
         Player::invite,
         Player::handcuffTask,
         Player::respawnTask,
-        Player::attendedRollCall
+        Player::attendedRollCall,
+        Player::isInTutorial
     )
 
     for (field in nonPersistentFields) {

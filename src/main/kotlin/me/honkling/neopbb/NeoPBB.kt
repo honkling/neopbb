@@ -16,6 +16,11 @@ import me.honkling.neopbb.discord.initializeKord
 import me.honkling.neopbb.event.packet.PacketInteraction
 import me.honkling.neopbb.schedule.registerScheduler
 import me.honkling.neopbb.task.registerTasks
+import me.tofaa.entitylib.APIConfig
+import me.tofaa.entitylib.EntityLib
+import me.tofaa.entitylib.EntityLibAPI
+import me.tofaa.entitylib.spigot.SpigotEntityLibAPI
+import me.tofaa.entitylib.spigot.SpigotEntityLibPlatform
 import org.bukkit.Bukkit
 import org.bukkit.GameRule
 import org.bukkit.World
@@ -27,6 +32,7 @@ val scope = CoroutineScope(Dispatchers.IO)
 
 lateinit var world: World; private set
 lateinit var packetEvents: PacketEventsAPI<Plugin>; private set
+lateinit var entityLib: SpigotEntityLibAPI; private set
 
 class NeoPBB : JavaPlugin() {
     override fun onLoad() {
@@ -41,6 +47,12 @@ class NeoPBB : JavaPlugin() {
 
     override fun onEnable() {
         packetEvents.init()
+
+        val platform = SpigotEntityLibPlatform(this)
+        EntityLib.init(platform, APIConfig(packetEvents)
+            .usePlatformLogger())
+
+        entityLib = platform.api
 
         world = Bukkit.getWorlds()[0]
         world.setGameRule(GameRule.DO_IMMEDIATE_RESPAWN, true)

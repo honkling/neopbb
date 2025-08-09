@@ -13,12 +13,14 @@ repositories {
     maven("https://repo.codemc.io/repository/maven-snapshots/")
     maven("https://repo.codemc.io/repository/maven-releases/")
     maven("https://repo.papermc.io/repository/maven-public/")
+    maven("https://maven.evokegames.gg/snapshots")
     maven("https://jitpack.io/")
     mavenLocal()
 }
 
 dependencies {
     paperweight.paperDevBundle("1.21.4-R0.1-SNAPSHOT")
+    implementation("me.tofaa.entitylib:spigot:+d4c3b1e-SNAPSHOT")
     implementation("io.github.honkling.commando:spigot:3.0.4")
     implementation("com.github.honkling:4koma-regex:1.3.0")
     implementation("dev.kord:kord-core:0.15.0")
