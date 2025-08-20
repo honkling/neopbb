@@ -33,6 +33,11 @@ class SwitchMaps {
             val prison = prisonsToml.prisons.getOrNull(index)
                 ?: return
 
+            if(prison.name == currentPrison.name) {
+                player.sendMessage("<p>This map is already selected.".mm)
+                return
+            }
+
             switchMap(prison)
         }
 
