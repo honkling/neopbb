@@ -6,7 +6,6 @@ import me.honkling.neopbb.profile.role
 import org.bukkit.Bukkit
 import kotlin.time.Clock
 import kotlin.time.ExperimentalTime
-import kotlin.time.Instant
 
 lateinit var currentPrison: PrisonsToml.Prison; internal set
 var lastLockdown = 0L

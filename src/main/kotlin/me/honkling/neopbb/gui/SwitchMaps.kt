@@ -1,6 +1,7 @@
 package me.honkling.neopbb.gui
 
 import me.honkling.neopbb.config.prisonsToml
+import me.honkling.neopbb.currentPrison
 import me.honkling.neopbb.instance
 import me.honkling.neopbb.lib.builder
 import me.honkling.neopbb.lib.mm
