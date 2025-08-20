@@ -17,6 +17,7 @@ import org.bukkit.Material
 import org.bukkit.block.Sign
 import org.bukkit.block.sign.Side
 import org.bukkit.event.player.PlayerInteractEvent
+import org.bukkit.inventory.ItemStack
 
 private fun onInteract(event: PlayerInteractEvent) {
     val player = event.player
@@ -57,10 +58,12 @@ private fun onInteract(event: PlayerInteractEvent) {
     }
 
     when (lineTwo) {
-        "Dagger" -> player.purchaseItem(1000f, dagger)
+        "Dagger" -> player.purchaseItem(400f, dagger)
         "Scrap Metal" -> player.purchaseItem(150f, scrapMetal)
         "Supreme Stick" -> player.purchaseItem(50f, supremeStick)
         "Illegal Healing" -> player.purchaseItem(30f, illegalGoldenApple)
         "Coal" -> player.purchaseItem(30f, coal)
+        "Arrows" -> player.purchaseItem(16f, ItemStack(Material.ARROW, 8))
+        "Strong Chest" -> player.purchaseItem(1000f, ItemStack(Material.IRON_CHESTPLATE))
     }
 }

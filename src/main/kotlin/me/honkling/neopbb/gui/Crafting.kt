@@ -4,6 +4,8 @@ import me.honkling.neopbb.instance
 import me.honkling.neopbb.lib.builder
 import me.honkling.neopbb.lib.cloak
 import me.honkling.neopbb.lib.coal
+import me.honkling.neopbb.lib.formatCurrency
+import me.honkling.neopbb.lib.lumber
 import me.honkling.neopbb.lib.mm
 import me.honkling.neopbb.lib.paper
 import me.honkling.neopbb.lib.pebble
@@ -11,13 +13,16 @@ import me.honkling.neopbb.lib.rock
 import me.honkling.neopbb.lib.scrapMetal
 import me.honkling.neopbb.lib.supremeStick
 import me.honkling.neopbb.lib.wireCutters
+import me.honkling.neopbb.lib.makeshiftSword
 import me.honkling.neopbb.profile.keycard
 import me.honkling.neopbb.profile.money
 import net.kyori.adventure.key.Key
 import net.kyori.adventure.sound.Sound
 import net.kyori.adventure.text.Component
+import net.kyori.adventure.text.TranslatableComponent
+import net.kyori.adventure.text.format.TextDecoration
+import net.kyori.adventure.text.serializer.plain.PlainTextComponentSerializer
 import org.bukkit.Bukkit
-import org.bukkit.Material
 import org.bukkit.entity.Player
 import org.bukkit.event.EventHandler
 import org.bukkit.event.HandlerList
@@ -25,6 +30,24 @@ import org.bukkit.event.Listener
 import org.bukkit.event.inventory.InventoryClickEvent
 import org.bukkit.event.inventory.InventoryCloseEvent
 import org.bukkit.inventory.ItemStack
+
+val recipes = mutableListOf(
+    recipe(makeshiftSword, 3 to lumber, cost = 25f),
+    recipe(rock, 9 to pebble),
+    recipe(paper, 1 to coal, 1 to scrapMetal, cost = 15f),
+    recipe(keycard, 3 to paper, 2 to supremeStick),
+    recipe(wireCutters, 4 to scrapMetal, 2 to supremeStick, 1 to rock),
+    recipe(cloak, 1 to coal, cost = 15f)
+)
+
+data class Recipe(
+    val outcome: ItemStack,
+    val ingredients: List<Pair<Int, ItemStack>>,
+    val cost: Float = 0f
+)
+
+fun recipe(outcome: ItemStack, vararg ingredients: Pair<Int, ItemStack>, cost: Float = 0f)
+    = Recipe(outcome, ingredients.toList(), cost)
 
 class Crafting {
     val inventory = Bukkit.createInventory(null, 9, Component.text("Crafting"))
@@ -35,7 +58,8 @@ class Crafting {
             if (event.whoClicked != player || event.inventory != gui.inventory)
                 return
 
-            fun tryCraft(result: ItemStack, vararg ingredients: Pair<Int, ItemStack>, cost: Float = 0f) {
+            fun tryCraft(recipe: Recipe) {
+                val (result, ingredients, cost) = recipe
                 if (ingredients.any { !player.inventory.containsAtLeast(it.second, it.first) } || cost > player.money) {
                     player.playSound(Sound.sound {
                         it.type(Key.key("minecraft:entity.villager.no"))
@@ -52,14 +76,10 @@ class Crafting {
             }
 
             event.isCancelled = true
+            val recipe = recipes.getOrNull(event.slot)
+                ?: return
 
-            when (event.slot) {
-                0 -> tryCraft(rock, 9 to pebble)
-                1 -> tryCraft(paper, 1 to coal, 1 to scrapMetal, cost = 15f)
-                2 -> tryCraft(keycard, 3 to paper, 2 to supremeStick)
-                3 -> tryCraft(wireCutters, 4 to scrapMetal, 2 to supremeStick, 1 to rock)
-                4 -> tryCraft(cloak, 1 to coal, cost = 15f)
-            }
+            tryCraft(recipe)
         }
 
         @EventHandler
@@ -70,34 +90,26 @@ class Crafting {
     }
 
     init {
-        inventory.setItem(0, ItemStack(Material.COBBLESTONE)
-            .builder()
-            .displayName("Rock")
-            .lore("Recipe:".mm, "9x <s>Pebbles".mm)
-            .build())
+        fun ItemStack.name()
+            = (displayName() as TranslatableComponent).arguments()[0].asComponent()
+                .decorationIfAbsent(TextDecoration.ITALIC, TextDecoration.State.FALSE)
 
-        inventory.setItem(1, ItemStack(Material.PAPER)
-            .builder()
-            .lore("Recipe:".mm, "1x <s>Coal".mm, "1x <s>Scrap Metal".mm, "15$".mm)
-            .build())
+        for ((index, recipe) in recipes.withIndex()) {
+            val (item, ingredients, cost) = recipe
+            val ingredientList = ingredients.map { (amount, it) ->
+                val name = PlainTextComponentSerializer.plainText().serialize(it.name())
+                "${amount}x <s>$name".mm
+            }.toMutableList()
 
-        inventory.setItem(2, ItemStack(Material.TRIPWIRE_HOOK)
-            .builder()
-            .displayName("Keycard")
-            .lore("Recipe:".mm, "3x <s>Paper".mm, "2x <s>Sticks".mm)
-            .build())
+            if (cost > 0f)
+                ingredientList += "<s>${formatCurrency(cost)}".mm
 
-        inventory.setItem(3, ItemStack(Material.SHEARS)
-            .builder()
-            .displayName("Wire Cutters")
-            .lore("Recipe:".mm, "4x <s>Scrap Metal".mm, "2x <s>Sticks".mm, "1x <s>Rock".mm)
-            .build())
-
-        inventory.setItem(4, ItemStack(Material.LEATHER_CHESTPLATE)
-            .builder()
-            .displayName("Cloak")
-            .lore("Recipe:".mm, "1x <s>Coal".mm, "15$".mm)
-            .build())
+            inventory.setItem(index, ItemStack(item.type)
+                .builder()
+                .displayName(item.name())
+                .lore("Recipe:".mm, *ingredientList.toTypedArray())
+                .build())
+        }
     }
 
     fun Player.openGUI() {

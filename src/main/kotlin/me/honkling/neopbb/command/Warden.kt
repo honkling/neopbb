@@ -118,6 +118,7 @@ private fun release(sender: Player, player: Player) {
 
     player.role = Role.Prisoner
     player.solitaryTask?.let { Bukkit.getScheduler().cancelTask(it) }
+    player.solitaryTask = null
 
     if (player.isRespawning)
         player.forceRespawn()

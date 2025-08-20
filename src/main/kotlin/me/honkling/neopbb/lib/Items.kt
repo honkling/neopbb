@@ -1,5 +1,6 @@
 package me.honkling.neopbb.lib
 
+import io.papermc.paper.datacomponent.DataComponentTypes
 import me.honkling.neopbb.event.lumberLogs
 import me.honkling.neopbb.event.miningOres
 import net.kyori.adventure.text.Component
@@ -7,12 +8,18 @@ import net.kyori.adventure.text.format.NamedTextColor
 import net.kyori.adventure.text.format.TextDecoration
 import org.bukkit.Color
 import org.bukkit.Material
+import org.bukkit.NamespacedKey
+import org.bukkit.attribute.Attribute
+import org.bukkit.attribute.AttributeModifier
 import org.bukkit.enchantments.Enchantment
+import org.bukkit.inventory.EquipmentSlot
+import org.bukkit.inventory.EquipmentSlotGroup
 import org.bukkit.inventory.ItemStack
 import org.bukkit.inventory.meta.Damageable
 import org.bukkit.inventory.meta.LeatherArmorMeta
 import org.bukkit.inventory.meta.PotionMeta
 import org.bukkit.potion.PotionEffectType
+import java.util.UUID
 
 val paper = ItemStack(Material.PAPER)
 val soup = ItemStack(Material.MUSHROOM_STEW)
@@ -43,10 +50,9 @@ val illegalGoldenApple = ItemStack(Material.GOLDEN_APPLE)
     .displayName("Golden Apple <red>[CONTRABAND]".mm)
     .build()
 
-val dagger = ItemStack(Material.IRON_SWORD)
+val dagger = ItemStack(Material.STONE_SWORD)
     .builder()
     .displayName("Dagger <red>[CONTRABAND]".mm)
-    .enchant(Enchantment.SHARPNESS, 2)
     .build()
 
 val wireCutters = ItemStack(Material.IRON_PICKAXE)
@@ -73,6 +79,13 @@ val bountyHunterSword = ItemStack(Material.WOODEN_SWORD)
     .lore("Kill players with this sword.")
     .build()
 
+val makeshiftSword = ItemStack(Material.WOODEN_SWORD)
+    .builder()
+    .displayName("Makeshift Sword <red>[CONTRABAND]".mm)
+    .lore("A sword you crafted yourself!")
+    .enchant(Enchantment.SHARPNESS)
+    .build()
+
 val lumberAxe = ItemStack(Material.WOODEN_AXE)
     .builder()
     .displayName("Lumber Axe".mm)
@@ -90,6 +103,12 @@ val miningPickaxe = ItemStack(Material.IRON_PICKAXE)
     .builder()
     .lore("Use this pickaxe to mine ores.")
     .canDestroy(*miningOres.keys.toTypedArray())
+    .build()
+
+val lumber = ItemStack(Material.OAK_PLANKS)
+    .builder()
+    .displayName("Lumber".mm)
+    .lore("Maybe it can be used to craft something...?")
     .build()
 
 val shovel = ItemStack(Material.IRON_SHOVEL)
@@ -123,6 +142,21 @@ class ItemStackBuilder(private val itemStack: ItemStack) {
 
     fun potionEffect(type: PotionEffectType, duration: Int, amplifier: Int): ItemStackBuilder {
         (meta as? PotionMeta)?.addCustomEffect(type.createEffect(duration, amplifier), true)
+        return this
+    }
+
+    fun attribute(type: Attribute, slot: EquipmentSlotGroup, value: Double): ItemStackBuilder {
+        meta.addAttributeModifier(type, AttributeModifier(
+            NamespacedKey("minecraft", UUID.randomUUID().toString()),
+            value,
+            AttributeModifier.Operation.ADD_NUMBER,
+            slot
+        ))
+        return this
+    }
+
+    fun maxDamage(amount: Int): ItemStackBuilder {
+        itemStack.setData(DataComponentTypes.MAX_DAMAGE, amount)
         return this
     }
 

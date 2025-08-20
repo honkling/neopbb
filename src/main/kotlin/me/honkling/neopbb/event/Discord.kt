@@ -46,7 +46,11 @@ private fun onQuit(event: PlayerQuitEvent) {
     }
 }
 
+@Priority(EventPriority.HIGHEST)
 private fun onDeath(event: PlayerDeathEvent) {
+    if (event.isCancelled)
+        return
+
     val victim = replaceMessage(event.player.name)
     val attacker = (event.damageSource.causingEntity as? Player)?.let { replaceMessage(it.name) }
 
