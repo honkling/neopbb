@@ -12,7 +12,7 @@ import me.honkling.neopbb.profile.role
 import org.bukkit.command.CommandSender
 import org.bukkit.entity.Player
 
-private fun money(sender: CommandSender, player: Player, money: Float) {
+private fun setMoney(sender: CommandSender, player: Player, money: Float) {
     player.money = money
     sender.sendMessage("<p><s>${player.name}</s> now has <s>${formatCurrency(money)}</s>.".mm)
 }
