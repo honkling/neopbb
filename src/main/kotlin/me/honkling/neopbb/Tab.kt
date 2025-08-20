@@ -1,12 +1,7 @@
 package me.honkling.neopbb
 
 import me.honkling.neopbb.lib.mm
-import me.honkling.neopbb.profile.Role
-import me.honkling.neopbb.profile.rankAndName
-import me.honkling.neopbb.profile.respawnTask
-import me.honkling.neopbb.profile.role
-import me.honkling.neopbb.profile.warden
-import me.honkling.neopbb.profile.wardenStart
+import me.honkling.neopbb.profile.*
 import net.kyori.adventure.text.Component
 import net.kyori.adventure.text.JoinConfiguration
 import net.kyori.adventure.text.minimessage.tag.resolver.Placeholder
@@ -18,8 +13,8 @@ import kotlin.time.ExperimentalTime
 @OptIn(ExperimentalTime::class)
 fun refreshTab() {
     val players = Bukkit.getOnlinePlayers()
-    val prisoners = players.filter { !it.role.isAuthority }
-    val guards = players.filter { it.role.isAuthority && it.role != Role.Warden }
+    val prisoners = players.filter { !it.role.isAuthority } .sortedBy { it.role.ordinal }
+    val guards = players.filter { it.role.isAuthority && it.role != Role.Warden } .sortedBy { it.role.ordinal }
 
     val noDamage = if ((warden?.noDamageTicks ?: -1) > 0)
         " <aqua>[${warden!!.noDamageTicks / 20}s of No-Damage]</aqua>"
