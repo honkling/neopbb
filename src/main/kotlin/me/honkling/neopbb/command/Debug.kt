@@ -2,7 +2,6 @@
 
 package me.honkling.neopbb.command
 
-import me.honkling.commando.common.command.node.ParameterNode
 import me.honkling.commando.spigot.command.Command
 import me.honkling.neopbb.lib.formatCurrency
 import me.honkling.neopbb.lib.mm
@@ -10,7 +9,6 @@ import me.honkling.neopbb.profile.Role
 import me.honkling.neopbb.profile.money
 import me.honkling.neopbb.profile.prepare
 import me.honkling.neopbb.profile.role
-import org.bukkit.Bukkit
 import org.bukkit.command.CommandSender
 import org.bukkit.entity.Player
 
@@ -25,20 +23,4 @@ private fun setRole(sender: CommandSender, player: Player, role: Role, withKit: 
 
     if(withKit)
         player.prepare(true, broadcast = false)
-}
-
-private fun `setRole$complete`(sender: CommandSender, node: ParameterNode<Command>, input: String): List<String> {
-    val suggestions = when (node.name) {
-        "player" -> Bukkit.getOnlinePlayers()
-            .map { it.name }
-
-        "role" -> Role.entries
-            .map { it.name }
-
-        "withKit" -> listOf("true", "false")
-
-        else -> emptyList()
-    }
-
-    return suggestions.filter { it.contains(input, ignoreCase = true) }
 }
