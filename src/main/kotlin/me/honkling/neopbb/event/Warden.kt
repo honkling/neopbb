@@ -7,11 +7,7 @@ import me.honkling.neopbb.gui.SwitchMaps
 import me.honkling.neopbb.lastLockdown
 import me.honkling.neopbb.lastMapSwitch
 import me.honkling.neopbb.lib.mm
-import me.honkling.neopbb.profile.Role
-import me.honkling.neopbb.profile.purchase
-import me.honkling.neopbb.profile.role
-import me.honkling.neopbb.profile.swatUnlocked
-import me.honkling.neopbb.profile.warden
+import me.honkling.neopbb.profile.*
 import me.honkling.neopbb.schedule.Period
 import me.honkling.neopbb.schedule.period
 import me.honkling.neopbb.schedule.tickSchedule
@@ -80,7 +76,9 @@ private fun onOpenEnderChest(event: PlayerInteractEvent) {
     val player = event.player
 
     if (event.clickedBlock?.type == Material.ENDER_CHEST && event.action.isRightClick && player.role.isAuthority) {
-        player.sendMessage("<p>You cannot open your ender chest as a guard.".mm)
+        val rolePart = if (player.role == Role.Warden) "the warden" else "a ${player.role.name.lowercase()}"
+
+        player.sendMessage("<p>You cannot open your ender chest as $rolePart.".mm)
         event.isCancelled = true
     }
 }

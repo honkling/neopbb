@@ -10,3 +10,4 @@ val warden: Player?
 var wardenStart = 0L
 var wardenCooldown = 0
 var swatUnlocked = false
+var lastSolitary = System.currentTimeMillis()-(1_000*60*5)

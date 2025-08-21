@@ -41,7 +41,10 @@ data class Invite(val player: Player, val role: Role) {
 
     fun expire() {
         cancel()
-        player.sendMessage("<p>Your invitation to become a ${role.name.lowercase()} has expired.".mm)
+
+        val roleFormatted = if(role == Role.Warden) "the warden" else "a ${role.name.lowercase()}"
+
+        player.sendMessage("<p>Your invitation to become $roleFormatted has expired.".mm)
         player.invite = null
     }
 }
