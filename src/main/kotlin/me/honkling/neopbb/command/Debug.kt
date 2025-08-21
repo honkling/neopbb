@@ -32,15 +32,15 @@ private fun teleportCell(sender: CommandSender, player: Player, prisonName: Stri
     val prison = prisonsToml.prisons.find { prisonName.equals(it.name, ignoreCase = true) }
         ?: return sender.sendMessage("<p>The prison named <s>$prisonName</s> is not found.".mm)
 
-    val prisonCellCount = "<s>[${cellIndex}/${prison.cells.size-1}]</s>"
+    val prisonCellCount = "<s>[${cellIndex}/${prison.prisonerCells.size-1}]</s>"
 
-    if(prison.cells.isEmpty())
+    if(prison.prisonerCells.isEmpty())
         return sender.sendMessage("<p>The prison named <s>$prisonName</s> does not have any cells. $prisonCellCount".mm)
 
-    if(cellIndex >= prison.cells.size)
+    if(cellIndex >= prison.prisonerCells.size)
         return  sender.sendMessage("<p>The prison named <s>$prisonName</s> does not have that many cells. $prisonCellCount".mm)
 
-    val cellLocation = prison.cells[cellIndex]
+    val cellLocation = prison.prisonerCells[cellIndex]
 
     player.teleport(cellLocation)
     player.sendMessage("<p>You have been teleported to the prison named <s>$prisonName</s> cell number <s>$cellIndex</s>. $prisonCellCount".mm)

@@ -106,9 +106,13 @@ private fun solitary(sender: Player, player: Player) {
     player.role = Role.Solitary
     player.solitaryTask = Bukkit.getScheduler().scheduleSyncDelayedTask(instance, {
         Bukkit.getPlayer(player.uniqueId)?.let { player = it } // Refresh player instance in case they relogged
+
+        if(player.role == Role.Solitary) {
+            player.role = Role.Prisoner
+            player.prepare(true, broadcast = true)
+        }
+
         player.solitaryTask = null
-        player.role = Role.Prisoner
-        player.prepare(true, broadcast = true)
 
         if (!player.isOnline)
             player.cleanUp()

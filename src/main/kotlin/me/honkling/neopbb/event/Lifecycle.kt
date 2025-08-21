@@ -7,6 +7,7 @@ import com.destroystokyo.paper.event.player.PlayerStopSpectatingEntityEvent
 import me.honkling.commando.spigot.event.Listener
 import me.honkling.neopbb.currentPrison
 import me.honkling.neopbb.instance
+import me.honkling.neopbb.lib.getRandomCell
 import me.honkling.neopbb.lib.mm
 import me.honkling.neopbb.profile.*
 import me.honkling.neopbb.refreshTab
@@ -99,7 +100,7 @@ private fun onRespawn(event: PlayerPostRespawnEvent) {
             player.spectatorTarget = attacker
 
         if (attacker == null)
-            player.teleport(if (player.inSolitary) currentPrison.solitary
+            player.teleport(if (player.inSolitary) getRandomCell(currentPrison.solitaryCells)
                 else currentPrison.respawn)
     }, 0L, 1L)
 

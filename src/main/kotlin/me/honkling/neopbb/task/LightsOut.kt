@@ -1,6 +1,7 @@
 package me.honkling.neopbb.task
 
 import me.honkling.neopbb.currentPrison
+import me.honkling.neopbb.lib.isInCell
 import me.honkling.neopbb.profile.Role
 import me.honkling.neopbb.profile.inCell
 import me.honkling.neopbb.profile.role
@@ -18,20 +19,10 @@ internal fun executeLightsOut() {
     loop@ for (player in Bukkit.getOnlinePlayers()) {
         val role = player.role
 
-        if(role.isAuthority || role == Role.Criminal) continue
+        if(role.isAuthority || role == Role.Criminal || role == Role.Solitary) continue
         if(player.hasPotionEffect(PotionEffectType.GLOWING) && player.getPotionEffect(PotionEffectType.GLOWING)?.duration!! >= 5) continue
 
-        val playerLocation = player.location
-
-        val isInCell = currentPrison.cells.any { loc ->
-            if (loc.world != playerLocation.world) continue@loop
-
-            val dx = playerLocation.blockX - loc.blockX
-            val dy = playerLocation.blockY - loc.blockY
-            val dz = playerLocation.blockZ - loc.blockZ
-
-            dx in -1..1 && dy in -1..1 && dz in -1..1
-        }
+        val isInCell = isInCell(player, currentPrison.prisonerCells)
 
         player.inCell = isInCell
 

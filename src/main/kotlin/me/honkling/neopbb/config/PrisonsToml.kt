@@ -17,12 +17,12 @@ data class PrisonsToml(
         val name: String,
         val icon: Material,
         val wardenSpawn: Location,
-        val cells: List<Location>,
+        val prisonerCells: List<Location>,
         val blackMarketIn: Location,
         val blackMarketOut: Location,
         val respawn: Location,
         val bertrude: Location,
-        val solitary: Location
+        val solitaryCells: List<Location>
     )
 }
 

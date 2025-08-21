@@ -1,7 +1,7 @@
 package me.honkling.neopbb
 
-import io.netty.util.internal.ThreadLocalRandom
 import me.honkling.neopbb.config.PrisonsToml
+import me.honkling.neopbb.lib.getRandomCell
 import me.honkling.neopbb.profile.Role
 import me.honkling.neopbb.profile.role
 import org.bukkit.Bukkit
@@ -21,12 +21,7 @@ fun switchMap(newPrison: PrisonsToml.Prison) {
         val role = player.role
         player.teleport(when (role) {
             Role.Warden -> newPrison.wardenSpawn
-            else -> {
-                val random = ThreadLocalRandom.current();
-                val randomCellIndex = random.nextInt(0, newPrison.cells.size)
-
-                newPrison.cells[randomCellIndex]
-            }
+            else -> getRandomCell(newPrison.prisonerCells)
         })
     }
 }

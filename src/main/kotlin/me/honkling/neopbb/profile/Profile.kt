@@ -1,6 +1,7 @@
 package me.honkling.neopbb.profile
 
 import me.honkling.neopbb.currentPrison
+import me.honkling.neopbb.lib.getRandomCell
 import me.honkling.neopbb.lib.mm
 import me.honkling.neopbb.profile.key.NonPersistentKey
 import me.honkling.neopbb.profile.key.createKey
@@ -66,7 +67,7 @@ fun Player.forceRespawn() {
     sendTitlePart(TitlePart.SUBTITLE, Component.empty())
     prepare(true, broadcast = false)
     teleport(
-        if (inSolitary) currentPrison.solitary
+        if (inSolitary) getRandomCell(currentPrison.solitaryCells)
         else currentPrison.respawn
     )
 }
