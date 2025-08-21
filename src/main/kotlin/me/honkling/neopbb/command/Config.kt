@@ -10,7 +10,7 @@ import me.honkling.neopbb.config.reloadPrisonsToml
 import me.honkling.neopbb.lib.mm
 import org.bukkit.command.CommandSender
 
-private fun config(sender: CommandSender, config: String) {
+private fun reloadConfig(sender: CommandSender, config: String) {
     when (config) {
         "main" -> {
             reloadConfigToml()
@@ -30,6 +30,6 @@ private fun config(sender: CommandSender, config: String) {
     }
 }
 
-private fun `config$complete`(sender: CommandSender, node: ParameterNode<Command>, input: String): List<String> {
-    return listOf("filter", "prisons").filter { it.contains(input, true) }
+private fun `reloadConfig$complete`(sender: CommandSender, node: ParameterNode<Command>, input: String): List<String> {
+    return listOf("filter", "prisons", "main").filter { it.contains(input, true) }
 }

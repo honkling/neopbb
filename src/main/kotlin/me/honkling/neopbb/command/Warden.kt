@@ -109,6 +109,13 @@ private fun solitary(sender: Player, player: Player) {
     player.forceRespawn()
 }
 
+private fun `solitary$complete`(sender: CommandSender, node: ParameterNode<Command>, input: String): List<String> {
+    return Bukkit.getOnlinePlayers()
+        .filter { !it.role.isAuthority && !it.inSolitary && !it.isRespawning }
+        .map { it.name }
+        .filter { it.contains(input, true) }
+}
+
 private fun release(sender: Player, player: Player) {
     if (warden != sender)
         return sender.sendMessage("<p>You aren't the warden.".mm)
@@ -122,6 +129,13 @@ private fun release(sender: Player, player: Player) {
     if (player.isRespawning)
         player.forceRespawn()
     else player.prepare(true, broadcast = true)
+}
+
+private fun `release$complete`(sender: CommandSender, node: ParameterNode<Command>, input: String): List<String> {
+    return Bukkit.getOnlinePlayers()
+        .filter { it.inSolitary }
+        .map { it.name }
+        .filter { it.contains(input, true) }
 }
 
 private fun help(sender: CommandSender) {
