@@ -1,6 +1,8 @@
 package me.honkling.neopbb.task
 
+import me.honkling.neopbb.profile.Role
 import me.honkling.neopbb.profile.attendedRollCall
+import me.honkling.neopbb.profile.role
 import me.honkling.neopbb.schedule.Period
 import me.honkling.neopbb.schedule.period
 import me.honkling.neopbb.schedule.tickSchedule
@@ -17,7 +19,7 @@ internal fun executeRollCall() {
         return
 
     for (player in Bukkit.getOnlinePlayers()) {
-        if (player.attendedRollCall)
+        if (player.attendedRollCall || player.role.isAuthority || player.role == Role.Criminal || player.role == Role.Solitary)
             continue
 
         val below = player.location.clone().add(0.0, -1.0, 0.0)
