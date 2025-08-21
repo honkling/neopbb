@@ -10,5 +10,6 @@ fun registerTasks() {
     scheduler.scheduleSyncRepeatingTask(instance, {
         executeRollCall()
         executeActionBar()
+        executeLightsOut()
     }, 0L, 1L)
 }

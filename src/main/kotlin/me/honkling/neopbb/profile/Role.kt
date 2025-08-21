@@ -1,5 +1,6 @@
 package me.honkling.neopbb.profile
 
+import io.netty.util.internal.ThreadLocalRandom
 import me.honkling.neopbb.*
 import me.honkling.neopbb.lib.builder
 import me.honkling.neopbb.lib.illegalGoldenApple
@@ -316,7 +317,12 @@ enum class Role(
         inventory.setItem(EquipmentSlot.CHEST, chestplate)
         inventory.setItem(EquipmentSlot.LEGS, leggings)
         inventory.setItem(EquipmentSlot.FEET, boots)
-        teleport(currentPrison.prisonerSpawn)
+
+        val random = ThreadLocalRandom.current()
+        val randomCellIndex = random.nextInt(0, currentPrison.cells.size)
+        val cellLocation = currentPrison.cells[randomCellIndex]
+
+        teleport(cellLocation)
     }),
     Solitary(false, solitaryTeam, "<black><gray>[<black>SOLITARY</black>]</gray>");
 

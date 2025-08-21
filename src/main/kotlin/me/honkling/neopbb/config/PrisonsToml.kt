@@ -17,7 +17,7 @@ data class PrisonsToml(
         val name: String,
         val icon: Material,
         val wardenSpawn: Location,
-        val prisonerSpawn: Location,
+        val cells: List<Location>,
         val blackMarketIn: Location,
         val blackMarketOut: Location,
         val respawn: Location,
@@ -25,6 +25,7 @@ data class PrisonsToml(
         val solitary: Location
     )
 }
+
 
 fun reloadPrisonsToml() {
     val file = instance.dataFolder.resolve("prisons.toml")
