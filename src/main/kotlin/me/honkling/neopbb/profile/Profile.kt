@@ -79,6 +79,7 @@ fun Player.cleanUp() {
     val nonPersistentFields = listOf(
         Player::role,
         Player::invite,
+        Player::inCell,
         Player::handcuffTask,
         Player::respawnTask,
         Player::attendedRollCall,

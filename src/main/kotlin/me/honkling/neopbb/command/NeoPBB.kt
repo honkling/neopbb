@@ -37,11 +37,10 @@ private fun `reloadConfig$complete`(sender: CommandSender, node: ParameterNode<C
 // === Builder Dangerous Commands ===
 
 private fun createPrison(sender: Player, prisonName: String) {
-    if (prisonsToml.prisons.any { it.name.equals(prisonName, ignoreCase = true) })
+    if (prisonsToml.prisons.any { it.name.equals(prisonName, true) })
         return sender.sendMessage("<p>The prison named <s>$prisonName</s> already exists.".mm)
 
     val defaultLocation = sender.location
-
     val newPrison = PrisonsToml.Prison(
         name = prisonName,
         icon = Material.STONE,
@@ -56,22 +55,12 @@ private fun createPrison(sender: Player, prisonName: String) {
 
     updatePrison(prisonName, newPrison)
     savePrisonsToml()
-    sender.sendMessage("<p>The prison <s>$prisonName</s> has been created.".mm)
+    sender.sendMessage("<p>The <s>$prisonName</s> prison has been created.".mm)
 }
 
-private fun removePrison(sender: Player, prisonName: String) {
-   prisonsToml.prisons.find { it.name.equals(prisonName, ignoreCase = true) }
-        ?: return sender.sendMessage("<p>There prison named <s>$prisonName</s> does not exist.".mm)
-
-    updatePrison(prisonName, null)
-
+private fun removePrison(sender: Player, prison: PrisonsToml.Prison) {
+    updatePrison(prison.name, null)
     savePrisonsToml()
-    sender.sendMessage("<p>The prison named <s>$prisonName</s> has been removed.".mm)
-}
 
-private fun `removePrison$complete`(sender: Player, node: ParameterNode<Command>, input: String): List<String> {
-    return when (node.name) {
-        "prisonName" -> prisonsToml.prisons.map { it.name } .filter { it.contains(input, true) }
-        else -> emptyList()
-    }
+    sender.sendMessage("<p><s>${prison.name}</s> has been removed.".mm)
 }

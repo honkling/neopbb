@@ -14,9 +14,8 @@ internal fun executeSolitary() {
     val solitaryPlayers = Bukkit.getOnlinePlayers().filter { it.role == Role.Solitary }
 
     for (player in solitaryPlayers) {
-        val inSolitaryCell = isInCell(player, currentPrison.solitaryCells)
-
-        if(inSolitaryCell) continue
+        if (isInCell(player, currentPrison.solitaryCells))
+            continue
 
         player.role = Role.Prisoner
         player.role.team.addPlayer(player) // Doesn't swap team without prepare...

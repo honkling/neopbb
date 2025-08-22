@@ -2,9 +2,13 @@
 name = "Hypertech"
 icon = "SMOOTH_QUARTZ_STAIRS"
 wardenSpawn = { world = "world", x = 73.5, y = 18.5, z = 90.5, yaw = 180.0 }
-prisonerSpawn = { world = "world", x = 39.5, y = 12.0, z = 68.5, yaw = -90.0 }
 blackMarketIn = { world = "world", x = -7.5, y = 7.0, z = 83.5, yaw = -90.0 }
 blackMarketOut = { world = "world", x = 62.0, y = 12.0, z = 70.0, yaw = 135.0 }
 respawn = { world = "world", x = 27.5, y = 12.0, z = 74.5, yaw = -90.0 }
 bertrude = { world = "world", x = 53.5, y = 12.0, z = 71.5, yaw = 180.0 }
-solitary = { world = "world", x = 74.5, y = 12.0, z = 58.5 }
+prisonerCells = [
+    { world = "world", x = 39.5, y = 12.0, z = 68.5, yaw = -90.0 }
+]
+solitaryCells = [
+    { world = "world", x = 74.5, y = 12.0, z = 58.5 }
+]

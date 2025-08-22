@@ -9,30 +9,26 @@ import me.honkling.neopbb.profile.*
 import org.bukkit.entity.Player
 
 private fun accept(player: Player) {
-    if(player.isRespawning)
-        return player.sendMessage("<p>You can't accept invitations during respawning.".mm)
+    if (player.isRespawning)
+        return player.sendMessage("<p>You cannot accept invitations while dead.".mm)
 
-    if(player.inSolitary)
-        return player.sendMessage("<p>You can't accept invitations while in solitary".mm)
+    if (player.inSolitary)
+        return player.sendMessage("<p>You cannot accept invitations while in solitary.".mm)
 
-    if(player.health <= 10)
-        return player.sendMessage("<p>You can't accept invitations while under 10 hearts.".mm)
+    if (player.health <= 10)
+        return player.sendMessage("<p>You cannot accept invitations while under half health.".mm)
 
     val invite = player.invite
         ?: return player.sendMessage("<p>You don't have any invitations.".mm)
 
-    val isWardenPass = invite.role == Role.Warden && warden != null;
+    if (invite.role == Role.Warden && warden != null) {
+        val pastWarden = warden!!
 
-    if(isWardenPass) {
-        val pastWarden = warden
+        if (pastWarden.health <= 10)
+            return player.sendMessage("<p>Warden cannot be passed to you while the current warden is under half health.".mm)
 
-        pastWarden?.health?.let {
-            if(it <= 10)
-                return player.sendMessage("<p>You can't accept invitation for passing warden until current warden is above 5 hearts.".mm)
-        }
-
-        pastWarden?.role = Role.Prisoner
-        pastWarden?.prepare(true, broadcast = false)
+        pastWarden.role = Role.Prisoner
+        pastWarden.prepare(true, broadcast = false)
     }
 
     player.role = invite.role

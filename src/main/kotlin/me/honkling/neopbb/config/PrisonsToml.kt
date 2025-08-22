@@ -24,11 +24,11 @@ data class PrisonsToml(
         val icon: Material,
         val wardenSpawn: Location,
         val prisonerCells: List<Location>,
+        val solitaryCells: List<Location>,
         val blackMarketIn: Location,
         val blackMarketOut: Location,
         val respawn: Location,
-        val bertrude: Location,
-        val solitaryCells: List<Location>
+        val bertrude: Location
     )
 }
 
@@ -90,29 +90,28 @@ fun savePrisonsToml() {
 fun updatePrison(prisonName: String, newPrison: PrisonsToml.Prison?) {
     // This is for removing a prison.
     if (newPrison == null) {
-        val updatedList = prisonsToml.prisons.filterNot { it.name.equals(prisonName, ignoreCase = true) }
-        prisonsToml = prisonsToml.copy(prisons = updatedList)
+        val updatedList = prisonsToml.prisons.filterNot { it.name.equals(prisonName, true) }
+        prisonsToml = prisonsToml.copy(updatedList)
         savePrisonsToml()
 
-        if (currentPrison.name.equals(prisonName, ignoreCase = true)) {
+        if (currentPrison.name.equals(prisonName, true)) {
             currentPrison = updatedList.firstOrNull() ?: return
             switchMap(currentPrison)
-            Bukkit.broadcast("<p>The current prison named $prisonName was removed.".mm)
         }
+
         return
     }
 
     // This is for creating a prison.
-    if (prisonsToml.prisons.none { it.name.equals(newPrison.name, ignoreCase = true) }) {
-        prisonsToml = prisonsToml.copy(prisons = prisonsToml.prisons + newPrison)
-    // This is for editing prison.
-    } else {
-        val updatedList = prisonsToml.prisons.map { if (it.name.equals(prisonName, ignoreCase = true)) newPrison else it }
-        prisonsToml = prisonsToml.copy(prisons = updatedList)
+    if (prisonsToml.prisons.none { it.name.equals(newPrison.name, true) }) {
+        prisonsToml = prisonsToml.copy(prisonsToml.prisons + newPrison)
+    } else { // This is for editing prison.
+        val updatedList = prisonsToml.prisons.map { if (it.name.equals(prisonName, true)) newPrison else it }
+        prisonsToml = prisonsToml.copy(updatedList)
     }
 
     savePrisonsToml()
 
-    if (currentPrison.name.equals(prisonName, ignoreCase = true))
+    if (currentPrison.name.equals(prisonName, true))
         currentPrison = newPrison
 }

@@ -8,6 +8,7 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import me.honkling.commando.spigot.SpigotCommando
+import me.honkling.neopbb.config.PrisonsToml
 import me.honkling.neopbb.config.prisonsToml
 import me.honkling.neopbb.config.reloadConfigToml
 import me.honkling.neopbb.config.reloadFilterToml
@@ -16,6 +17,7 @@ import me.honkling.neopbb.discord.initializeKord
 import me.honkling.neopbb.event.packet.PacketInteraction
 import me.honkling.neopbb.schedule.registerScheduler
 import me.honkling.neopbb.task.registerTasks
+import me.honkling.neopbb.type.PrisonType
 import org.bukkit.Bukkit
 import org.bukkit.GameRule
 import org.bukkit.World
@@ -61,6 +63,7 @@ class NeoPBB : JavaPlugin() {
         val commando = SpigotCommando(this)
         val packetInteraction = PacketInteraction(commando)
         commando.interactionRegistry.register(packetInteraction)
+        commando.typeRegistry.register(PrisonType, PrisonsToml.Prison::class)
         commando.register("me.honkling.neopbb", "command", "event")
         packetEvents.eventManager.registerListener(packetInteraction, PacketListenerPriority.NORMAL)
     }

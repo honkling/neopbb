@@ -21,7 +21,7 @@ import kotlin.math.ceil
 class SwitchMaps {
     private fun buildInventory(): Inventory {
         val size = (ceil(prisonsToml.prisons.size / 9.0).toInt() * 9).coerceIn(0, 6)
-        val inv = Bukkit.createInventory(null, size, Component.text("Switch Maps"))
+        val inventory = Bukkit.createInventory(null, size, Component.text("Switch Maps"))
 
         for ((index, prison) in prisonsToml.prisons.withIndex()) {
             val itemStack = ItemStack(prison.icon)
@@ -29,9 +29,10 @@ class SwitchMaps {
                 .displayName(prison.name.mm)
                 .build()
 
-            inv.setItem(index, itemStack)
+            inventory.setItem(index, itemStack)
         }
-        return inv
+
+        return inventory
     }
 
     class EventNode(val inventory: Inventory, val player: Player) : Listener {
@@ -44,7 +45,7 @@ class SwitchMaps {
             val prison = prisonsToml.prisons.getOrNull(index)
                 ?: return
 
-            if(prison.name == currentPrison.name) {
+            if (prison.name == currentPrison.name) {
                 player.sendMessage("<p>This map is already selected.".mm)
                 return
             }

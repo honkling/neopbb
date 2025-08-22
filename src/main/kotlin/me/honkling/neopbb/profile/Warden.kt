@@ -7,7 +7,7 @@ var lastWarden: Player? = null
 val warden: Player?
     get() = Bukkit.getOnlinePlayers().find { it.role == Role.Warden }
 
+var lastSolitary = 0L
 var wardenStart = 0L
 var wardenCooldown = 0
 var swatUnlocked = false
-var lastSolitary = System.currentTimeMillis()-(1_000*60*5)

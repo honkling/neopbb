@@ -33,7 +33,5 @@ internal fun executeRollCall() {
             })
             tickSchedule()
         }
-
-        player.addPotionEffect(PotionEffectType.GLOWING.createEffect(5, 0))
     }
 }
