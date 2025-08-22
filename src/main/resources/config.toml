@@ -2,3 +2,6 @@
 invite = ""
 token = ""
 channelId = 0
+reportsId = 0
+staffLogsId = 0
+staffId = 0

@@ -33,7 +33,7 @@ private fun onInteract(event: PlayerInteractEvent) {
             if (player.role == Role.Warden || !player.role.isAuthority)
                 return player.sendMessage("<p>Only guards, nurses, and swats can restore their kit.".mm)
 
-            player.prepare(true, broadcast = false)
+            player.prepare(true)
         }
     }
 }

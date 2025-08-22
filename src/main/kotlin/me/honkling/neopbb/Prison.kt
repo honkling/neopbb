@@ -16,6 +16,7 @@ var lastMapSwitch = 0L
 fun switchMap(newPrison: PrisonsToml.Prison) {
     currentPrison = newPrison
     lastMapSwitch = Clock.System.now().epochSeconds
+    bertrude.teleport(currentPrison.bertrude)
 
     for (player in Bukkit.getOnlinePlayers()) {
         val role = player.role

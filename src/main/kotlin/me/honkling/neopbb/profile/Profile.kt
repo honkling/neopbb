@@ -15,6 +15,7 @@ import org.bukkit.Bukkit
 import org.bukkit.GameMode
 import org.bukkit.attribute.Attribute
 import org.bukkit.entity.Player
+import java.util.UUID
 import kotlin.reflect.jvm.isAccessible
 
 var Player.role by createKey(Role.Prisoner, persistent = false)
@@ -29,10 +30,12 @@ var Player.solitaryTask by createKey<Int?>(persistent = false)
 var Player.handcuffTask by createKey<Int?>(false)
 var Player.respawnTask by createKey<Int?>(false)
 
+var Player.spawnWithUniform by createKey<Boolean>(fallbackValue = true)
+
 val Player.inSolitary get() = solitaryTask != null
 val Player.isRespawning get() = respawnTask != null
 
-fun Player.prepare(reset: Boolean, broadcast: Boolean) {
+fun Player.prepare(reset: Boolean, broadcast: Boolean = false) {
     if (reset) {
         inventory.clear()
         health = getAttribute(Attribute.MAX_HEALTH)!!.value
@@ -65,7 +68,7 @@ fun Player.forceRespawn() {
 
     sendTitlePart(TitlePart.TITLE, Component.empty())
     sendTitlePart(TitlePart.SUBTITLE, Component.empty())
-    prepare(true, broadcast = false)
+    prepare(true)
     teleport(
         if (inSolitary) getRandomCell(currentPrison.solitaryCells)
         else currentPrison.respawn
@@ -78,7 +81,8 @@ fun Player.cleanUp() {
         Player::invite,
         Player::handcuffTask,
         Player::respawnTask,
-        Player::attendedRollCall
+        Player::attendedRollCall,
+        Player::isInBlackMarket
     )
 
     for (field in nonPersistentFields) {

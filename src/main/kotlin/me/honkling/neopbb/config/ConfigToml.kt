@@ -15,7 +15,10 @@ data class ConfigToml(
     data class Discord(
         val invite: String,
         val token: String,
-        val channelId: Snowflake
+        val channelId: Snowflake,
+        val reportsId: Snowflake,
+        val staffLogsId: Snowflake,
+        val staffId: Snowflake
     )
 }
 

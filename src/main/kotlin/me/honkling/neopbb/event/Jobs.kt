@@ -44,7 +44,7 @@ val miningOres = mutableMapOf(
     Material.REDSTONE_ORE to 10.0f
 )
 
-val lumberLogs = Material.entries.filter { "LOG" in it.name }
+val lumberLogs = Material.entries.filter { "LOG" in it.name && "STRIPPED_" !in it.name }
 
 private fun onDamage(event: EntityDamageEvent) {
     val player = event.entity as? Player ?: return
@@ -70,14 +70,21 @@ private fun onBreak(event: BlockBreakEvent) {
     val type = block.type
 
     if (itemStack.compareWithoutDurability(lumberAxe) && type in lumberLogs) {
-        block.type = Material.STRIPPED_SPRUCE_LOG
+        val data = block.blockData
+        block.type = Material.valueOf("STRIPPED_${block.type.name}")
         player.sendMessage("<s>+$2</s> for cutting wood".mm)
         player.playSound(yes)
         player.money += 2
 
+        if (Math.random() <= 0.2) {
+            player.sendMessage("<p>You extracted a plank from the log! (<s>20%</s>)".mm)
+            player.give(lumber)
+            return
+        }
+
         Bukkit.getScheduler().scheduleSyncDelayedTask(instance, {
-            block.type = type
-        }, 20L * 10)
+            block.world.setBlockData(block.location, data)
+        }, 20L * 4)
     }
 
     if (itemStack.compareWithoutDurability(miningPickaxe) && type in miningOres) {
@@ -125,11 +132,13 @@ private fun onInteract(event: PlayerInteractEvent) {
         player.inventory.addItem(ItemStack(Material.COD))
     }
 
+    if (block.type == Material.BLAST_FURNACE)
+        event.isCancelled = true
+
     if (block.type == Material.BLAST_FURNACE && event.item?.type == Material.COD && player.getCooldown(Material.COD) <= 0) {
         event.item!!.amount--
         player.setCooldown(Material.COD, 2)
         player.playSound(yes)
-        event.isCancelled = true
 
         Bukkit.getScheduler().scheduleSyncDelayedTask(instance, {
             player.playSound(yes)

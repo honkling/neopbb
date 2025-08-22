@@ -50,6 +50,7 @@ class NeoPBB : JavaPlugin() {
         reloadPrisonsToml()
         currentPrison = prisonsToml.prisons[0]
 
+        spawnBertrude()
         registerScheduler()
         registerTasks()
 

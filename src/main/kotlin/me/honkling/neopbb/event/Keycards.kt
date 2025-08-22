@@ -7,6 +7,7 @@ import me.honkling.neopbb.profile.keycard
 import me.honkling.neopbb.world
 import net.kyori.adventure.key.Key
 import net.kyori.adventure.sound.Sound
+import org.bukkit.Material
 import org.bukkit.block.data.type.Door
 import org.bukkit.event.player.PlayerInteractEvent
 import org.bukkit.inventory.EquipmentSlot
@@ -20,7 +21,7 @@ private fun onInteract(event: PlayerInteractEvent) {
 
     val mainItem = player.inventory.getItem(hand).asOne()
     val offItem = player.inventory.getItem(hand.oppositeHand).asOne()
-    if ("TRAPDOOR" in block.type.name || mainItem != keycard || (offItem == keycard && hand != EquipmentSlot.HAND))
+    if (block.type != Material.IRON_DOOR || mainItem != keycard || (offItem == keycard && hand != EquipmentSlot.HAND))
         return
 
     block.world.playSound(Sound.sound {
