@@ -28,28 +28,67 @@ private fun setRole(sender: CommandSender, player: Player, role: Role, withKit: 
         player.prepare(true, broadcast = false)
 }
 
-private fun teleportCell(sender: CommandSender, player: Player, prisonName: String, cellIndex: Int) {
+// === Debug Builder Commands ===
+
+private fun teleportCell(sender: CommandSender, player: Player, prisonName: String, cellType: String, cellIndex: Int) {
     val prison = prisonsToml.prisons.find { prisonName.equals(it.name, ignoreCase = true) }
         ?: return sender.sendMessage("<p>The prison named <s>$prisonName</s> is not found.".mm)
 
-    val prisonCellCount = "<s>[${cellIndex}/${prison.prisonerCells.size-1}]</s>"
+    val cells = when (cellType.lowercase()) {
+        "prisoner" -> prison.prisonerCells
+        "solitary" -> prison.solitaryCells
+        else -> return sender.sendMessage("<p>You must provide either <s>prisoner</s> or <s>solitary</s> as the cell type.".mm)
+    }
 
-    if(prison.prisonerCells.isEmpty())
-        return sender.sendMessage("<p>The prison named <s>$prisonName</s> does not have any cells. $prisonCellCount".mm)
+    val cellCount = "<s>[${cellIndex}/${cells.size-1}]</s>"
 
-    if(cellIndex >= prison.prisonerCells.size)
-        return  sender.sendMessage("<p>The prison named <s>$prisonName</s> does not have that many cells. $prisonCellCount".mm)
+    if(cells.isEmpty())
+        return sender.sendMessage("<p>The prison named <s>$prisonName</s> does not have any $cellType cells. $cellCount".mm)
 
-    val cellLocation = prison.prisonerCells[cellIndex]
+    if(cellIndex >= cells.size)
+        return  sender.sendMessage("<p>The prison named <s>$prisonName</s> does not have that many $cellType cells. $cellCount".mm)
+
+    val cellLocation = cells[cellIndex]
 
     player.teleport(cellLocation)
-    player.sendMessage("<p>You have been teleported to the prison named <s>$prisonName</s> cell number <s>$cellIndex</s>. $prisonCellCount".mm)
+    player.sendMessage("<p>You have been teleported to the prison named <s>$prisonName</s>'s $cellType cell number <s>$cellIndex</s>. $cellCount".mm)
 }
 
 private fun `teleportCell$complete`(sender: CommandSender, node: ParameterNode<Command>, input: String): List<String> {
     return when (node.name) {
         "prisonName" -> prisonsToml.prisons.map { it.name }
         "player" -> Bukkit.getOnlinePlayers().map { it.name }
+        "cellType" -> listOf("solitary", "prisoner")
+        else -> emptyList()
+    }
+}
+
+private fun teleportLocation(sender: Player,  player: Player, prisonName: String, locationType: String) {
+    val prison = prisonsToml.prisons.find { it.name.equals(prisonName, ignoreCase = true) }
+        ?: return sender.sendMessage("<p>There is no prison by the name <s>$prisonName</s>.".mm)
+
+    val targetLocation = when (locationType.lowercase()) {
+        "warden" -> prison.wardenSpawn
+        "respawn" -> prison.respawn
+        "bertrude" -> prison.bertrude
+        "blackmarketin" -> prison.blackMarketIn
+        "blackmarketout" -> prison.blackMarketOut
+        else -> return sender.sendMessage(("<p>You must provide one of the following " +
+                "<s>warden</s>, <s>respawn</s>, <s>bertrude</s>, <s>blackmarketin</s>, and <s>blackmarketout</s>" +
+                " as the locationType.").mm)
+    }
+
+    player.teleport(targetLocation)
+    player.sendMessage("<p>You have been teleported to the prison named <s>$prisonName</s>'s <s>$locationType</s>.".mm)
+    if(player != sender)
+        sender.sendMessage("<p>You have teleported ${player.name} to the prison named <s>$prisonName</s>'s <s>$locationType</s> location.".mm)
+}
+
+private fun `teleportLocation$complete`(sender: CommandSender, node: ParameterNode<Command>, input: String): List<String> {
+    return when (node.name) {
+        "prisonName" -> prisonsToml.prisons.map { it.name }
+        "player" -> Bukkit.getOnlinePlayers().map { it.name }
+        "locationType" -> listOf("warden", "respawn", "bertrude", "blackmarketin", "blackmarketout")
         else -> emptyList()
     }
 }

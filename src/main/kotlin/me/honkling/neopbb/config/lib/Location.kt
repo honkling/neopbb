@@ -1,11 +1,13 @@
 package me.honkling.neopbb.config.lib
 
+import cc.ekblad.toml.configuration.TomlMapperConfigurator
 import cc.ekblad.toml.model.TomlValue
+import cc.ekblad.toml.util.InternalAPI
 import org.bukkit.Bukkit
 import org.bukkit.Location
 import kotlin.reflect.KType
 
-val location: Decoder = Location::class to { type: KType, it: TomlValue ->
+val locationDecoder: Decoder = Location::class to { type: KType, it: TomlValue ->
     if (it !is TomlValue.Map)
         it
     else {
@@ -24,3 +26,21 @@ val location: Decoder = Location::class to { type: KType, it: TomlValue ->
             )
     }
 }
+
+fun TomlMapperConfigurator.useLocationEncoder() {
+    @OptIn(InternalAPI::class)
+    this.encoder(Location::class) { value ->
+        val loc = value as Location
+        TomlValue.Map(
+            mapOf(
+                "world" to TomlValue.String(loc.world?.name ?: "world"),
+                "x" to TomlValue.Double(loc.x),
+                "y" to TomlValue.Double(loc.y),
+                "z" to TomlValue.Double(loc.z),
+                "yaw" to TomlValue.Double(loc.yaw.toDouble()),
+                "pitch" to TomlValue.Double(loc.pitch.toDouble())
+            )
+        )
+    }
+}
+

@@ -21,6 +21,7 @@ fun switchMap(newPrison: PrisonsToml.Prison) {
         val role = player.role
         player.teleport(when (role) {
             Role.Warden -> newPrison.wardenSpawn
+            Role.Solitary -> getRandomCell(newPrison.solitaryCells)
             else -> getRandomCell(newPrison.prisonerCells)
         })
     }
